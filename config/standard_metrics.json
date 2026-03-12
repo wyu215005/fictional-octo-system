@@ -1,0 +1,76 @@
+{
+  "metrics": [
+    {
+      "name": "日活跃用户数",
+      "alias": ["dau", "daily_active_users", "日活"],
+      "formula_type": "COUNT",
+      "formula": "COUNT(DISTINCT user_id)",
+      "filter_conditions": ["status = 'active'", "dt >= current_date"],
+      "dimensions": ["dt", "channel"],
+      "description": "每日活跃用户数量，按渠道和日期分组"
+    },
+    {
+      "name": "月活跃用户数",
+      "alias": ["mau", "monthly_active_users", "月活"],
+      "formula_type": "COUNT",
+      "formula": "COUNT(DISTINCT user_id)",
+      "filter_conditions": ["status = 'active'"],
+      "dimensions": ["month", "channel"],
+      "description": "每月活跃用户数量，按渠道和月份分组"
+    },
+    {
+      "name": "交易总金额",
+      "alias": ["gmv", "total_transaction_amount", "交易额"],
+      "formula_type": "SUM",
+      "formula": "SUM(transaction_amount)",
+      "filter_conditions": ["status = 'success'", "is_deleted = 0"],
+      "dimensions": ["dt", "merchant_id", "channel"],
+      "description": "交易成功的总金额，按日期、商户和渠道分组"
+    },
+    {
+      "name": "平均交易金额",
+      "alias": ["avg_transaction_amount", "客单价", "avg_amount"],
+      "formula_type": "AVG",
+      "formula": "AVG(transaction_amount)",
+      "filter_conditions": ["status = 'success'", "is_deleted = 0"],
+      "dimensions": ["dt", "merchant_id"],
+      "description": "成功交易的平均金额，按日期和商户分组"
+    },
+    {
+      "name": "风险用户数",
+      "alias": ["risk_users", "风险用户", "high_risk_count"],
+      "formula_type": "COUNT",
+      "formula": "COUNT(DISTINCT user_id)",
+      "filter_conditions": ["risk_level IN ('high', 'medium')", "is_blocked = 0"],
+      "dimensions": ["dt", "risk_level", "region"],
+      "description": "风险等级为高或中的用户数，按日期、风险等级和地区分组"
+    },
+    {
+      "name": "拒绝率",
+      "alias": ["reject_rate", "拒绝比率", "rejection_rate"],
+      "formula_type": "AVG",
+      "formula": "AVG(CASE WHEN decision = 'reject' THEN 1.0 ELSE 0.0 END)",
+      "filter_conditions": ["dt >= '2024-01-01'"],
+      "dimensions": ["dt", "product_type"],
+      "description": "决策为拒绝的比率，按日期和产品类型分组"
+    },
+    {
+      "name": "新增用户数",
+      "alias": ["new_users", "新用户", "new_user_count"],
+      "formula_type": "COUNT",
+      "formula": "COUNT(DISTINCT user_id)",
+      "filter_conditions": ["register_date = dt"],
+      "dimensions": ["dt", "channel", "source"],
+      "description": "新注册用户数，按日期、渠道和来源分组"
+    },
+    {
+      "name": "交易笔数",
+      "alias": ["transaction_count", "交易量", "order_count"],
+      "formula_type": "COUNT",
+      "formula": "COUNT(transaction_id)",
+      "filter_conditions": ["status = 'success'"],
+      "dimensions": ["dt", "merchant_id", "product_type"],
+      "description": "成功交易的笔数，按日期、商户和产品类型分组"
+    }
+  ]
+}
